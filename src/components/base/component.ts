@@ -6,4 +6,14 @@ export abstract class Component<T> {
   toggleClass(element: HTMLElement, className: string) {
     element.classList.toggle(className);
   }
+
+  addImage(element: HTMLImageElement, src: string) {
+    element.src = src;
+  }
+
+  addText(element: HTMLElement, text: string) {
+    element.textContent = text;
+  }
+
+  
 }
