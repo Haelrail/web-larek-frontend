@@ -28,7 +28,7 @@ export class Model {
 
   openCard(card: ICard) {
     this.actualCard = card;
-    console.log(this.actualCard);
+    // console.log(this.actualCard);
     // this.events.emit('card:open');
   };
 

@@ -13,9 +13,9 @@ import { cloneTemplate, ensureElement } from './utils/utils';
 import { Modal } from './components/modal';
 
 const cardCatalogTemplate = ensureElement<HTMLTemplateElement>('#card-catalog');
-const cardBasketTemplate = ensureElement<HTMLElement>('#card-basket');
-const cardPreviewTemplate = ensureElement<HTMLElement>('#card-preview');
-const modalTemplate = ensureElement<HTMLElement>('#modal-container')
+const cardBasketTemplate = ensureElement<HTMLTemplateElement>('#card-basket');
+const cardPreviewTemplate = ensureElement<HTMLTemplateElement>('#card-preview');
+const modalTemplate = ensureElement<HTMLTemplateElement>('#modal-container')
 
 const api = new ProjectApi(CDN_URL, API_URL);
 const events = new EventEmitter();
@@ -35,7 +35,7 @@ events.on("catalog:fill", (catalog: ICard[]) => {
 });
 
 events.on("card:open", (item: ICard) => {
-  const card = new Card(cloneTemplate(cardCatalogTemplate), events);
+  const card = new Card(cloneTemplate(cardPreviewTemplate), events);
   model.openCard(item);
   modal.elementUpdate({
     content: card.elementUpdate(item)
@@ -43,7 +43,13 @@ events.on("card:open", (item: ICard) => {
   modal.openModal();
 });
 
-events.on("modal:open", () => {});
+events.on("modal:open", () => {
+  page.isLocked = true;
+});
+
+events.on("modal:close", () => {
+  page.isLocked = false;
+});
 
 
 
@@ -56,5 +62,9 @@ events.on("modal:open", () => {});
 // реализовать базовые интерфейсы и типы данных из доки +
 // реализовать получение стартовых даных от сервера и их хранение +
 // реализовать отрисовку стартовой страницы +
-// реализовать открывание карточки товара по нажатию (подключение модалки и работы с ней)
-
+// реализовать открывание карточки товара по нажатию (подключение модалки и работы с ней) +
+// добавить закрытие модалки
+// корректное отображение данных на открытой карточке +
+// реализовать корзину
+// добавить на открытую карточку работающую кнопку добавления в корзину 
+// добавить открытие корзины по нажатию кнопки

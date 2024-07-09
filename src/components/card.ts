@@ -10,7 +10,8 @@ export class Card extends Component<ICard> {
   protected _category?: HTMLElement;
   protected _price: HTMLElement;
   protected _inBasket: boolean;
-  // protected _element: HTMLElement;
+  protected _button: HTMLButtonElement;
+  private item?: ICard;
 
   constructor(element: HTMLElement, events: IEvents) {
     super(element, events);
@@ -23,9 +24,10 @@ export class Card extends Component<ICard> {
     this._price = element.querySelector(`.card__price`);
     this._inBasket = false;
     element.addEventListener('click', () => {
-      events.emit('card:open', this);
+      if (this.item)
+        events.emit('card:open', this.item);
     });
-    // this._element = element;
+    this._button = element.querySelector(`.card__button`);
   }
 
   // id: string;
@@ -91,5 +93,12 @@ export class Card extends Component<ICard> {
 
   set inBasket(value: boolean) {
     this.inBasket = value;
+  }
+
+  elementUpdate(data?: Partial<ICard>): HTMLElement {
+    Object.assign(this as object, data ?? {});
+    if(data)
+      this.item = data as ICard;
+    return this.element;
   }
 }
