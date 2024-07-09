@@ -19,7 +19,11 @@ export class Model {
 
   constructor(protected events: IEvents) {};
   
-  setItems(items: IProduct[]){};
+  setItems(items: IProduct[]){
+    this.items = items;
+    // console.log(this.items);
+    this.events.emit('catalog:fill', this.items);
+  };
 
   checkBasket(){};
 

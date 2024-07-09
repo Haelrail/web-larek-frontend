@@ -4,9 +4,9 @@ import { ensureElement } from "../utils/utils";
 import { IPage } from "../types";
 
 export class Page extends Component<IPage> {
-  counter: number;
-  catalog: HTMLElement[];
-  locked: boolean;
+  // counter: number;
+  // catalog: HTMLElement[];
+  // locked: boolean;
 
   protected _counter: HTMLElement;
   protected _catalog: HTMLElement;
@@ -19,5 +19,13 @@ export class Page extends Component<IPage> {
     this._catalog = ensureElement<HTMLElement>(".gallery");
     this._basketButton = ensureElement<HTMLElement>(".header__basket");
     this._pageWrapper = ensureElement<HTMLElement>(".page__wrapper");
+  }
+
+  set catalog(items: HTMLElement[]) {
+    this._catalog.replaceChildren(...items);
+  }
+
+  set counter(counterUpdate: number) {
+    this.addText(this._counter, String(counterUpdate));
   }
 }

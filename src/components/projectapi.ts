@@ -18,7 +18,7 @@ export class ProjectApi extends Api implements IProjectApi {
   }
 
   getCards(): Promise<IProduct[]> {
-    return this.get(`/product/`).then((data: ApiListResponse<IProduct>) =>
+    return this.get(`/product`).then((data: ApiListResponse<IProduct>) =>
     data.items.map((item) => ({
       ...item,
       image: this.cdn + item.image,
