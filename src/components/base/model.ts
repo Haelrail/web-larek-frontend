@@ -15,6 +15,7 @@ export class Model {
     orderList: [],
     totalPrice: 0,
   };
+  actualCard: ICard;
   formErrors: Partial<Record<keyof OrderForm, string>> = {};
 
   constructor(protected events: IEvents) {};
@@ -23,6 +24,12 @@ export class Model {
     this.items = items;
     // console.log(this.items);
     this.events.emit('catalog:fill', this.items);
+  };
+
+  openCard(card: ICard) {
+    this.actualCard = card;
+    console.log(this.actualCard);
+    // this.events.emit('card:open');
   };
 
   checkBasket(){};

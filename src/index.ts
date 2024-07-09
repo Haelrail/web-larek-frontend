@@ -10,15 +10,18 @@ import { Model } from './components/base/model';
 import { Page } from './components/page';
 import { Card } from './components/card';
 import { cloneTemplate, ensureElement } from './utils/utils';
+import { Modal } from './components/modal';
+
+const cardCatalogTemplate = ensureElement<HTMLTemplateElement>('#card-catalog');
+const cardBasketTemplate = ensureElement<HTMLElement>('#card-basket');
+const cardPreviewTemplate = ensureElement<HTMLElement>('#card-preview');
+const modalTemplate = ensureElement<HTMLElement>('#modal-container')
 
 const api = new ProjectApi(CDN_URL, API_URL);
 const events = new EventEmitter();
 const model = new Model(events);
 const page = new Page(document.body, events);
-
-const cardCatalogTemplate = ensureElement<HTMLTemplateElement>('#card-catalog');
-const cardBasketTemplate = ensureElement<HTMLElement>('#card-basket');
-const cardPreviewTemplate = ensureElement<HTMLElement>('#card-preview');
+const modal = new Modal(modalTemplate, events);
 
 api.getCards()
   .then((data) => model.setItems(data))
@@ -31,6 +34,19 @@ events.on("catalog:fill", (catalog: ICard[]) => {
   });
 });
 
+events.on("card:open", (item: ICard) => {
+  const card = new Card(cloneTemplate(cardCatalogTemplate), events);
+  model.openCard(item);
+  modal.elementUpdate({
+    content: card.elementUpdate(item)
+  });
+  modal.openModal();
+});
+
+events.on("modal:open", () => {});
+
+
+
 // console.log(model.items);
 // console.log (page.catalog);
 
@@ -38,5 +54,7 @@ events.on("catalog:fill", (catalog: ICard[]) => {
 // i.textContent = '1';
 
 // реализовать базовые интерфейсы и типы данных из доки +
-// реализовать получение стартовых даных от сервера и их хранение
-// реализовать отрисовку стартовой страницы
+// реализовать получение стартовых даных от сервера и их хранение +
+// реализовать отрисовку стартовой страницы +
+// реализовать открывание карточки товара по нажатию (подключение модалки и работы с ней)
+

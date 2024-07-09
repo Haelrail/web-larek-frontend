@@ -10,6 +10,7 @@ export class Card extends Component<ICard> {
   protected _category?: HTMLElement;
   protected _price: HTMLElement;
   protected _inBasket: boolean;
+  // protected _element: HTMLElement;
 
   constructor(element: HTMLElement, events: IEvents) {
     super(element, events);
@@ -21,6 +22,10 @@ export class Card extends Component<ICard> {
     // this._price = ensureElement<HTMLElement>('.card__price');
     this._price = element.querySelector(`.card__price`);
     this._inBasket = false;
+    element.addEventListener('click', () => {
+      events.emit('card:open', this);
+    });
+    // this._element = element;
   }
 
   // id: string;

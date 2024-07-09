@@ -1,7 +1,7 @@
 import { IEvents } from "./events";
 
 export abstract class Component<T> {
-  protected constructor(protected readonly element: HTMLElement, event: IEvents) {};
+  protected constructor(protected readonly element: HTMLElement, protected readonly events: IEvents) {};
 
   toggleClass(element: HTMLElement, className: string) {
     element.classList.toggle(className);
@@ -19,6 +19,10 @@ export abstract class Component<T> {
 
   elementUpdate(data?: Partial<T>): HTMLElement {
     Object.assign(this as object, data ?? {});
+    return this.element;
+  }
+
+  returnElement(): HTMLElement {
     return this.element;
   }
 }
