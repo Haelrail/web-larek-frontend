@@ -20,17 +20,9 @@ const cardCatalogTemplate = ensureElement<HTMLTemplateElement>('#card-catalog');
 const cardBasketTemplate = ensureElement<HTMLElement>('#card-basket');
 const cardPreviewTemplate = ensureElement<HTMLElement>('#card-preview');
 
-// api.getCards()
-//   .then(model.setItems.bind(model))
-//   .catch((err) => console.log(err));
-
 api.getCards()
   .then((data) => model.setItems(data))
   .catch((err) => console.log(err));
-
-  // api.getCards()
-  // .then((data) => console.log(data))
-  // .catch((err) => console.log(err));
 
 events.on("catalog:fill", (catalog: ICard[]) => {
   page.catalog = catalog.map((item) => {

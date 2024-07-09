@@ -8,11 +8,13 @@ export abstract class Component<T> {
   }
 
   addImage(element: HTMLImageElement, src: string) {
-    element.src = src;
+    if (element)
+      element.src = src;
   }
 
   addText(element: HTMLElement, text: string) {
-    element.textContent = text;
+    if (element)
+      element.textContent = text;
   }
 
   elementUpdate(data?: Partial<T>): HTMLElement {
