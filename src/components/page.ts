@@ -19,6 +19,10 @@ export class Page extends Component<IPage> {
     this._catalog = ensureElement<HTMLElement>(".gallery");
     this._basketButton = ensureElement<HTMLElement>(".header__basket");
     this._pageWrapper = ensureElement<HTMLElement>(".page__wrapper");
+
+    this._basketButton.addEventListener('click', () => {
+      this.events.emit("basket:open");
+    })
   }
 
   set catalog(items: HTMLElement[]) {
@@ -30,10 +34,10 @@ export class Page extends Component<IPage> {
   }
 
   set isLocked(value: boolean) {
-    // if(value)
-    //   this._pageWrapper.classList.add("page__wrapper_locked");
-    // else
-    // this._pageWrapper.classList.remove("page__wrapper_locked");
-    this.toggleClass(this._pageWrapper, 'page__wrapper_locked');
+    if(value)
+      this._pageWrapper.classList.add("page__wrapper_locked");
+    else
+    this._pageWrapper.classList.remove("page__wrapper_locked");
+    // this.toggleClass(this._pageWrapper, 'page__wrapper_locked');
   }
 }
