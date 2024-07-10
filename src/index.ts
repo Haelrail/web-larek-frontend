@@ -30,6 +30,9 @@ api.getCards()
   .then((data) => model.setItems(data))
   .catch((err) => console.log(err));
 
+console.log(model.basket.orderList); //////
+console.log(model.basket.totalPrice); /////
+
 events.on("catalog:fill", (catalog: ICard[]) => {
   page.catalog = catalog.map((item) => {
     const card = new Card(cloneTemplate(cardCatalogTemplate), events);
@@ -40,6 +43,17 @@ events.on("catalog:fill", (catalog: ICard[]) => {
 events.on("card:open", (item: ICard) => {
   const card = new Card(cloneTemplate(cardPreviewTemplate), events);
   model.openCard(item);
+
+  // if (model.checkBasket(item))
+  //   card.inBasket = true;
+  // else
+  //   card.inBasket = false;
+
+  if (model.checkBasket(item))
+    card.button = 'Удалить из корзины';
+  else
+    card.button = 'В корзину';
+
   modal.elementUpdate({
     content: card.elementUpdate(item)
   });
@@ -55,10 +69,28 @@ events.on("modal:close", () => {
 });
 
 events.on("basket:open", () => {
+
+  basket.orderList = model.basket.orderList.map((id) => {
+    const item = model.items.find((item) => item.id === id);
+    if (item) {
+    const card = new Card(cloneTemplate(cardBasketTemplate), events);
+    return card.elementUpdate(item);
+    }
+  })
+
   modal.elementUpdate({
     content: basket.elementUpdate()
   });
   modal.openModal();
+})
+
+events.on("basket:change", (item: ICard) => {
+  if (!model.checkBasket(item))
+    model.addInBasket(item);
+  else
+    model.removeFromBasket(item);
+  page.counter = model.basket.orderList.length;
+  basket.totalPrice = model.basket.totalPrice;
 })
 
 // console.log(model.items);
@@ -67,6 +99,7 @@ events.on("basket:open", () => {
 // const i = document.querySelector(`.header__basket-counter`);
 // i.textContent = '1';
 
+// привести в требуемый вид документацию
 // реализовать базовые интерфейсы и типы данных из доки +
 // реализовать получение стартовых даных от сервера и их хранение +
 // реализовать отрисовку стартовой страницы +
@@ -74,6 +107,9 @@ events.on("basket:open", () => {
 // реализовать открывание карточки товара по нажатию (подключение модалки и работы с ней) +
 // добавить закрытие модалки +
 // корректное отображение данных на открытой карточке +
-// реализовать корзину
-// добавить на открытую карточку работающую кнопку добавления в корзину 
-// добавить открытие корзины по нажатию кнопки
+// реализовать корзину +
+// добавить на открытую карточку работающую кнопку добавления в корзину +
+// добавить открытие корзины по нажатию кнопки +
+// корректное отображение интерфейса корзины +
+// настроить удаление карточки из окна корзины при нажатии на кнопку
+// подключить формы

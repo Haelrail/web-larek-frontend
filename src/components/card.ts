@@ -22,12 +22,20 @@ export class Card extends Component<ICard> {
     this._category = element.querySelector(`.card__category`);
     // this._price = ensureElement<HTMLElement>('.card__price');
     this._price = element.querySelector(`.card__price`);
-    this._inBasket = false;
+    // this._inBasket = false;
     element.addEventListener('click', () => {
-      if (this.item)
+      if (this.item && this._image)
         events.emit('card:open', this.item);
     });
     this._button = element.querySelector(`.card__button`);
+    if (this._button) {
+      this._button.addEventListener('click', () => {
+        if (this.item) {
+          events.emit('basket:change', this.item);
+        }
+        // console.log('123');
+      })
+    }
   }
 
   // id: string;
@@ -91,14 +99,22 @@ export class Card extends Component<ICard> {
     return this.inBasket;
   }
 
-  set inBasket(value: boolean) {
-    this.inBasket = value;
-  }
+  // set inBasket(value: boolean) {
+  //   this.inBasket = value;
+  //   if (value)
+  //     this._button.textContent = 'Удалить из корзины';
+  //   else
+  //     this._button.textContent = 'В корзину';
+  // }
 
   elementUpdate(data?: Partial<ICard>): HTMLElement {
     Object.assign(this as object, data ?? {});
     if(data)
       this.item = data as ICard;
     return this.element;
+  }
+
+  set button(text: string) {
+    this.addText(this._button, text);
   }
 }

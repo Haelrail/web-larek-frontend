@@ -15,10 +15,13 @@ export class Modal extends Component<IModal> {
     this._content = ensureElement<HTMLElement>(".modal__content", element);
     this._button = ensureElement<HTMLButtonElement>(".modal__close", element);
 
-    this.element.addEventListener('click', (event) => {
-      if (!this._content.contains(event.target as Node))
-        this.closeModal();
-    })
+  document.addEventListener('click', (evt) => {
+    const target = evt.target as Element;
+    if (target.matches('.modal_active')) {
+      this.closeModal();
+    }
+  })
+
     this._button.addEventListener('click', this.closeModal.bind(this));
   }
 

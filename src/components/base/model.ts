@@ -32,11 +32,25 @@ export class Model {
     // this.events.emit('card:open');
   };
 
-  checkBasket(){};
+  checkBasket(card: ICard) {
+    return this.basket.orderList.includes(card.id);
+  };
 
-  addInBasket(){};
+  addInBasket(card: ICard) {
+    this.basket.orderList.push(card.id);
+    this.basket.totalPrice += card.price;
+    console.log(this.basket.orderList); //
+    console.log(this.basket.totalPrice); //
+  };
 
-  removeFromBasket(){};
+  removeFromBasket(card: ICard) {
+    this.basket.totalPrice -= card.price;
+    const index = this.basket.orderList.findIndex((id) => id === card.id);
+    if (index >= 0)
+      this.basket.orderList.splice(index, 1);
+    console.log(this.basket.orderList); //
+    console.log(this.basket.totalPrice); //
+  };
 
   clearBasket(){};
 
