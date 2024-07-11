@@ -7,6 +7,13 @@ export abstract class Component<T> {
     element.classList.toggle(className);
   }
 
+  changeDisabled(element: HTMLElement, value: boolean) {
+    if (value)
+      element.setAttribute('disabled', 'disabled');
+    else
+      element.removeAttribute('disabled');
+  }
+
   addImage(element: HTMLImageElement, src: string) {
     if (element)
       element.src = src;
@@ -22,7 +29,7 @@ export abstract class Component<T> {
     return this.element;
   }
 
-  returnElement(): HTMLElement {
-    return this.element;
-  }
+  // returnElement(): HTMLElement {
+  //   return this.element;
+  // }
 }

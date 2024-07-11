@@ -54,9 +54,16 @@ export class Model {
 
   clearBasket(){};
 
-  setOrder(){};
+  setField(field: keyof OrderForm, input: string) {
+    if (field === 'payment')
+      this.setPaymentMethod(input as PaymentType);
+    else
+      this.order[field] = input; //
+  };
 
-  setPayment(){};
+  setPaymentMethod(value: PaymentType) {
+    this.order.payment = value;
+  };
 
   checkOrder(){};
 }

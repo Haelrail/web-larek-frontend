@@ -7,7 +7,7 @@ export type ProductType =
 
 export type OrderForm = Omit<IOrder, 'orderList' | 'totalPrice'>;
 
-export type PaymentType = 'online' | 'cash' | null;
+export type PaymentType = 'card' | 'cash' | null;
 
 export interface IProduct {
   id: string;
