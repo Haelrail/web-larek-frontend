@@ -93,10 +93,10 @@ events.on("basket:open", () => {
   modal.openModal();
 })
 
-events.on("basket:change", (item: ICard) => {
-  if (!model.checkBasket(item))
+events.on("basket:change", (item?: ICard) => {
+  if (item && !model.checkBasket(item))
     model.addInBasket(item);
-  else
+  else if (item)
     model.removeFromBasket(item);
 
   page.counter = model.basket.orderList.length;
@@ -169,9 +169,19 @@ events.on("contacts:submit", () => {
   api.orderConfirm(model.order)
     .then(() => {
       const success = new Success(cloneTemplate(successTemplate), events);
-
+      modal.elementUpdate({
+        content: success.elementUpdate({
+          totalPrice: model.order.total
+        })
+      })
+      model.clearBasket();
+      modal.openModal();
     })
     .catch((error) => console.log(error));
+})
+
+events.on("success:close", () => {
+  modal.closeModal();
 })
 
 // привести в требуемый вид документацию +-
@@ -196,4 +206,8 @@ events.on("contacts:submit", () => {
 // кнопка перехода между формами +
 // починить ломающуюся верстку кнопок выбора метода оплаты +
 // отключать кнопку снова при изменении корректных данных на некорректные +
-// надо ли где-то выводить текст ошибки при неправильном заполнении поля? в макете и чек-листе этого нет
+// надо ли где-то выводить текст ошибки при неправильном заполнении поля? в макете и чек-листе этого нет +
+// не уходит пост запрос на сервер, разобраться +
+// отрисовка окна подтверждения +
+// очистка корзины +
+// закрытие окна кнопкой подтверждения +

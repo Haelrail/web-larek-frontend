@@ -5,7 +5,7 @@ export type ProductType =
   | 'кнопка'
   | 'другое';
 
-export type OrderForm = Omit<IOrder, 'orderList' | 'totalPrice'>;
+export type OrderForm = Omit<IOrder, 'items' | 'total'>;
 
 export type PaymentType = 'card' | 'cash';
 
@@ -44,8 +44,8 @@ export interface IOrder {
   address: string;
   email: string;
   phone: string;
-  orderList: string[];
-  totalPrice: number;
+  items: string[];
+  total: number;
 }
 
 export interface IOrderConfirmation {

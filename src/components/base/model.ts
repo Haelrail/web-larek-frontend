@@ -12,8 +12,8 @@ export class Model {
     address: '',
     email: '',
     phone: '',
-    orderList: [],
-    totalPrice: 0,
+    items: [],
+    total: 0,
   };
   actualCard: ICard;
   formErrors: Partial<Record<keyof OrderForm, string>> = {};
@@ -52,13 +52,18 @@ export class Model {
     // console.log(this.basket.totalPrice); //
   };
 
-  clearBasket(){};
+  clearBasket() {
+    this.basket.orderList = [];
+    this.basket.totalPrice = 0;
+    this.events.emit('basket:change');
+  };
 
   setField(field: keyof OrderForm, input: string) {
     if (field === 'payment')
       this.setPaymentMethod(input as PaymentType);
     else
       this.order[field] = input; //
+
     this.checkOrder();
   };
 
@@ -84,8 +89,8 @@ export class Model {
   };
 
   formOrder() {
-    console.log(this.order); //
-    this.order.orderList = this.basket.orderList;
-    this.order.totalPrice = this.basket.totalPrice;
+    // console.log(this.order); //
+    this.order.items = this.basket.orderList;
+    this.order.total = this.basket.totalPrice;
   }
 }

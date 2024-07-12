@@ -26,8 +26,8 @@ export class ProjectApi extends Api implements IProjectApi {
   }
 
   orderConfirm(order: IOrder): Promise<IOrderConfirmation> {
-    return this.post(`order/`, order).then(
-      (data: IOrderConfirmation) => data);
+    return this.post(`/order`, order)
+      .then((data: IOrderConfirmation) => data);
   }
 
 }

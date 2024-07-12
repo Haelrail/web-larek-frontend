@@ -10,13 +10,17 @@ export class Success extends Component<IOrderConfirmation> {
   constructor(element: HTMLFormElement, events: IEvents) {
     super(element, events);
 
-    this._totalPrice = ensureElement<HTMLElement>(".order-success__description");
+    this._totalPrice = ensureElement<HTMLElement>(".order-success__description", this.element);
 
-    this._confirmButton = ensureElement<HTMLButtonElement>(".order-success__close");
+    this._confirmButton = ensureElement<HTMLButtonElement>(".order-success__close", this.element);
 
     this._confirmButton.addEventListener('click', () => {
-
+      this.events.emit('success:close');
     })
+  }
+
+  set totalPrice(value: number) {
+    this.addText(this._totalPrice, `Списано ${value} синапсов`);
   }
 
 }
