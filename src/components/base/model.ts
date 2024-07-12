@@ -11,7 +11,7 @@ export class Model {
     payment: null,
     address: '',
     email: '',
-    phoneNumber: '',
+    phone: '',
     orderList: [],
     totalPrice: 0,
   };
@@ -59,11 +59,26 @@ export class Model {
       this.setPaymentMethod(input as PaymentType);
     else
       this.order[field] = input; //
+    this.checkOrder();
   };
 
   setPaymentMethod(value: PaymentType) {
     this.order.payment = value;
   };
 
-  checkOrder(){};
+  checkOrder() {
+    const errors: typeof this.formErrors = {};
+    if (!this.order.address)
+      errors.address = "Введите адрес";
+    if (!this.order.email)
+      errors.email = "Введите Email";
+    if (this.order.email && !/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(this.order.email))
+      errors.email = "Введите корректный Email";
+    if (!this.order.phone)
+      errors.phone = "Введите номер телефона";
+    if (this.order.phone && !/^\+?[0-9]{10,14}$/.test(this.order.phone))
+      errors.phone = "Введите корректный номер телефона";
+    this.formErrors = errors;
+    this.events.emit('errors:change', this.formErrors);
+  };
 }

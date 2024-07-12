@@ -43,7 +43,7 @@ export interface IOrder {
   payment: PaymentType;
   address: string;
   email: string;
-  phoneNumber: string;
+  phone: string;
   orderList: string[];
   totalPrice: number;
 }

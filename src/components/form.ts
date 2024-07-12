@@ -13,14 +13,18 @@ export class Form<T> extends Component<IForm> {
 
   constructor(element: HTMLFormElement, events: IEvents) {
     super(element, events);
+
     this._submitButton = ensureElement<HTMLButtonElement>('button[type=submit]', this.element);
+
     this._errorList = ensureElement<HTMLElement>('.form__errors', this.element);
+
     this.element.addEventListener('input', (event) => {
       const target = event.target as HTMLInputElement;
       const input = target.name as keyof T;
       const value = target.value;
       this.inputUpdate(input, value);
     })
+    
     this.element.addEventListener('submit', (event) => {
       event.preventDefault();
       this.events.emit(`${(this.element as HTMLFormElement).name}:submit`);

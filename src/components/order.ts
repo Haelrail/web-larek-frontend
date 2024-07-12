@@ -6,23 +6,52 @@ import { ensureElement } from "../utils/utils";
 export class Order extends Form<OrderForm> {
   protected _cardMethod: HTMLButtonElement;
   protected _cashMethod: HTMLButtonElement;
+  // protected _address: HTMLInputElement;
+  // protected _email: HTMLInputElement;
+  // protected _phone: HTMLInputElement;
 
   constructor(element: HTMLFormElement, events: IEvents) {
     super(element, events);
+
     this._cardMethod = ensureElement<HTMLButtonElement>('.button_alt[name=card]', this.element);
+
     this._cardMethod.addEventListener('click', () => {
       this.payment = 'card';
-      
+      this.inputUpdate('payment', 'card');
     })
+
     this._cashMethod = ensureElement<HTMLButtonElement>('.button_alt[name=cash]', this.element);
+
     this._cashMethod.addEventListener('click', () => {
       this.payment = 'cash';
-      
+      this.inputUpdate('payment', 'cash');
     })
+    // this._address = this.element.elements.namedItem('address') as HTMLInputElement;
   }
 
   set payment(value: PaymentType) {
-    this.toggleClass(this._cardMethod, "card");
-    this.toggleClass(this._cashMethod, "cash");
+    if (value === 'card') {
+      // this.toggleClass(this._cardMethod, "button_alt-active");
+      // this.toggleClass(this._cashMethod, "button_alt-active");
+      this._cardMethod.classList.add("button_alt-active");
+      this._cashMethod.classList.remove("button_alt-active")
+    }
+    else {
+      this._cardMethod.classList.remove("button_alt-active");
+      this._cashMethod.classList.add("button_alt-active")
+    }
+
   }
+
+  set address(value: string) {
+    ((this.element as HTMLFormElement).elements.namedItem('address') as HTMLInputElement).value = value;
+  }
+
+  // set email(value: string) {
+  //   ((this.element as HTMLFormElement).elements.namedItem('email') as HTMLInputElement).value = value;
+  // }
+
+  // set phone(value: string) {
+  //   ((this.element as HTMLFormElement).elements.namedItem('email') as HTMLInputElement).value = value;
+  // }
 }

@@ -13,6 +13,7 @@ import { cloneTemplate, ensureElement } from './utils/utils';
 import { Modal } from './components/modal';
 import { Basket } from './components/basket';
 import { Order } from './components/order';
+import { Contacts } from './components/contacts';
 
 const cardCatalogTemplate = ensureElement<HTMLTemplateElement>('#card-catalog');
 const cardBasketTemplate = ensureElement<HTMLTemplateElement>('#card-basket');
@@ -20,6 +21,7 @@ const cardPreviewTemplate = ensureElement<HTMLTemplateElement>('#card-preview');
 const modalTemplate = ensureElement<HTMLElement>('#modal-container')
 const basketTemplate = ensureElement<HTMLTemplateElement>('#basket');
 const orderTemplate = ensureElement<HTMLTemplateElement>('#order');
+const contactsTemplate = ensureElement<HTMLTemplateElement>('#contacts');
 
 const api = new ProjectApi(CDN_URL, API_URL);
 const events = new EventEmitter();
@@ -28,6 +30,7 @@ const page = new Page(document.body, events);
 const modal = new Modal(modalTemplate, events);
 const basket = new Basket(cloneTemplate(basketTemplate), events);
 const order = new Order(cloneTemplate(orderTemplate), events);
+const contacts = new Contacts(cloneTemplate(contactsTemplate), events);
 
 api.getCards()
   .then((data) => model.setItems(data))
@@ -129,7 +132,31 @@ events.on(/^order\..*change/, (data: {
   }
 );
 
-// привести в требуемый вид документацию
+events.on(/^contacts\..*change/,(data: {
+  input: keyof OrderForm; value: string}) => {
+    model.setField(data.input, data.value);
+  }
+);
+
+events.on("errors:change", (errors: Partial<OrderForm>) => {
+  const { payment, address, email, phone } = errors;
+  order.isValid = !payment && !address;
+  contacts.isValid = !email && !phone;
+})
+
+events.on("order:submit", () => {
+  modal.elementUpdate({
+    content: contacts.elementUpdate({
+      payment: 'card',
+      address: '',
+      errorList: [],
+      isValid: false,
+    })
+  });
+  modal.openModal();
+})
+
+// привести в требуемый вид документацию +
 // реализовать базовые интерфейсы и типы данных из доки +
 // реализовать получение стартовых даных от сервера и их хранение +
 // реализовать отрисовку стартовой страницы +
@@ -146,7 +173,9 @@ events.on(/^order\..*change/, (data: {
 // отключение кнопки при пустой корзине +
 // подключить формы +
 // открытие формы нажатием кнопки в корзине +
-// изменение вводимых данных в полях
-// валидация введенных данных
-// кнопка перехода между формами
-// починить ломающуюся верстку кнопок выбора метода оплаты
+// изменение вводимых данных в полях +
+// валидация введенных данных +
+// кнопка перехода между формами +
+// починить ломающуюся верстку кнопок выбора метода оплаты +
+// отключать кнопку снова при изменении корректных данных на некорректные
+// надо ли где-то выводить текст ошибки при неправильном заполнении поля? в макете и чек-листе этого нет
