@@ -12,6 +12,13 @@ export class Card extends Component<ICard> {
   protected _inBasket: boolean;
   protected _button: HTMLButtonElement;
   private item?: ICard;
+  protected categoryPossible = <Record<string, string>>{
+    'софт-скил': '_soft',
+    'другое': '_other',
+    'дополнительное': '_additional',
+    'кнопка': '_button',
+    'хард-скил': '_hard'
+  };
 
   constructor(element: HTMLElement, events: IEvents) {
     super(element, events);
@@ -80,8 +87,12 @@ export class Card extends Component<ICard> {
     return this._category.textContent;
   }
 
-  set category(category: string) {
-    this.addText(this._category, category);
+  set category(value: string) {
+    this.addText(this._category, value);
+    this._category?.classList.remove('card__category_soft');
+    this._category?.classList.remove('card__category_other');
+    console.log(this.categoryPossible[value]);
+    this._category?.classList.add(`card__category${this.categoryPossible[value]}`);
   }
 
   get price(): string {
