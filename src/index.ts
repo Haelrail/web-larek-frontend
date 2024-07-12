@@ -14,6 +14,7 @@ import { Modal } from './components/modal';
 import { Basket } from './components/basket';
 import { Order } from './components/order';
 import { Contacts } from './components/contacts';
+import { Success } from './components/success';
 
 const cardCatalogTemplate = ensureElement<HTMLTemplateElement>('#card-catalog');
 const cardBasketTemplate = ensureElement<HTMLTemplateElement>('#card-basket');
@@ -22,6 +23,7 @@ const modalTemplate = ensureElement<HTMLElement>('#modal-container')
 const basketTemplate = ensureElement<HTMLTemplateElement>('#basket');
 const orderTemplate = ensureElement<HTMLTemplateElement>('#order');
 const contactsTemplate = ensureElement<HTMLTemplateElement>('#contacts');
+const successTemplate = ensureElement<HTMLTemplateElement>('#success');
 
 const api = new ProjectApi(CDN_URL, API_URL);
 const events = new EventEmitter();
@@ -36,8 +38,8 @@ api.getCards()
   .then((data) => model.setItems(data))
   .catch((err) => console.log(err));
 
-console.log(model.basket.orderList); //////
-console.log(model.basket.totalPrice); /////
+// console.log(model.basket.orderList); //////
+// console.log(model.basket.totalPrice); /////
 
 events.on("catalog:fill", (catalog: ICard[]) => {
   page.catalog = catalog.map((item) => {
@@ -115,6 +117,8 @@ events.on("basket:change", (item: ICard) => {
 })
 
 events.on("order:open", () => {
+  model.formOrder();
+  // console.log(basket.totalPrice); //
   modal.elementUpdate({
     content: order.elementUpdate({
       payment: 'card',
@@ -140,7 +144,11 @@ events.on(/^contacts\..*change/,(data: {
 
 events.on("errors:change", (errors: Partial<OrderForm>) => {
   const { payment, address, email, phone } = errors;
+  // console.log(payment); //
+  // console.log(address); //
   order.isValid = !payment && !address;
+  // console.log(email); //
+  // console.log(phone); //
   contacts.isValid = !email && !phone;
 })
 
@@ -156,7 +164,17 @@ events.on("order:submit", () => {
   modal.openModal();
 })
 
-// привести в требуемый вид документацию +
+events.on("contacts:submit", () => {
+  console.log(model.order); //
+  api.orderConfirm(model.order)
+    .then(() => {
+      const success = new Success(cloneTemplate(successTemplate), events);
+
+    })
+    .catch((error) => console.log(error));
+})
+
+// привести в требуемый вид документацию +-
 // реализовать базовые интерфейсы и типы данных из доки +
 // реализовать получение стартовых даных от сервера и их хранение +
 // реализовать отрисовку стартовой страницы +
@@ -177,5 +195,5 @@ events.on("order:submit", () => {
 // валидация введенных данных +
 // кнопка перехода между формами +
 // починить ломающуюся верстку кнопок выбора метода оплаты +
-// отключать кнопку снова при изменении корректных данных на некорректные
+// отключать кнопку снова при изменении корректных данных на некорректные +
 // надо ли где-то выводить текст ошибки при неправильном заполнении поля? в макете и чек-листе этого нет

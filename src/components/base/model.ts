@@ -8,7 +8,7 @@ export class Model {
     totalPrice: 0,
   };
   order: IOrder = {
-    payment: null,
+    payment: 'card',
     address: '',
     email: '',
     phone: '',
@@ -39,8 +39,8 @@ export class Model {
   addInBasket(card: ICard) {
     this.basket.orderList.push(card.id);
     this.basket.totalPrice += card.price;
-    console.log(this.basket.orderList); //
-    console.log(this.basket.totalPrice); //
+    // console.log(this.basket.orderList); //
+    // console.log(this.basket.totalPrice); //
   };
 
   removeFromBasket(card: ICard) {
@@ -48,8 +48,8 @@ export class Model {
     const index = this.basket.orderList.findIndex((id) => id === card.id);
     if (index >= 0)
       this.basket.orderList.splice(index, 1);
-    console.log(this.basket.orderList); //
-    console.log(this.basket.totalPrice); //
+    // console.log(this.basket.orderList); //
+    // console.log(this.basket.totalPrice); //
   };
 
   clearBasket(){};
@@ -76,9 +76,16 @@ export class Model {
       errors.email = "Введите корректный Email";
     if (!this.order.phone)
       errors.phone = "Введите номер телефона";
-    if (this.order.phone && !/^\+?[0-9]{10,14}$/.test(this.order.phone))
+    // if (this.order.phone && !/^\+?[0-9]{10,14}$/.test(this.order.phone))
+    if (this.order.phone && !/^\+?\d[\d\(\)\-\s]{9,17}\d$/.test(this.order.phone))
       errors.phone = "Введите корректный номер телефона";
     this.formErrors = errors;
     this.events.emit('errors:change', this.formErrors);
   };
+
+  formOrder() {
+    console.log(this.order); //
+    this.order.orderList = this.basket.orderList;
+    this.order.totalPrice = this.basket.totalPrice;
+  }
 }
