@@ -20,15 +20,15 @@ export class Model {
 
   constructor(protected events: IEvents) {};
   
+// получаем карточки, заполняем каталог
+
   setItems(items: IProduct[]){
     this.items = items;
-    // console.log(this.items);
     this.events.emit('catalog:fill', this.items);
   };
 
   openCard(card: ICard) {
     this.actualCard = card;
-    // console.log(this.actualCard);
     // this.events.emit('card:open');
   };
 
@@ -39,8 +39,6 @@ export class Model {
   addInBasket(card: ICard) {
     this.basket.orderList.push(card.id);
     this.basket.totalPrice += card.price;
-    // console.log(this.basket.orderList); //
-    // console.log(this.basket.totalPrice); //
   };
 
   removeFromBasket(card: ICard) {
@@ -48,8 +46,6 @@ export class Model {
     const index = this.basket.orderList.findIndex((id) => id === card.id);
     if (index >= 0)
       this.basket.orderList.splice(index, 1);
-    // console.log(this.basket.orderList); //
-    // console.log(this.basket.totalPrice); //
   };
 
   clearBasket() {
@@ -57,6 +53,8 @@ export class Model {
     this.basket.totalPrice = 0;
     this.events.emit('basket:change');
   };
+
+// изменения в одном из полей ввода
 
   setField(field: keyof OrderForm, input: string) {
     if (field === 'payment')
@@ -88,8 +86,9 @@ export class Model {
     this.events.emit('errors:change', this.formErrors);
   };
 
+// для запроса серверу
+
   formOrder() {
-    // console.log(this.order); //
     this.order.items = this.basket.orderList;
     this.order.total = this.basket.totalPrice;
   }

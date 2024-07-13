@@ -1,5 +1,7 @@
 import './scss/styles.scss';
 
+// все импорты
+
 import { ProjectApi } from './components/projectapi';
 import './scss/styles.scss';
 import { ProductType,  OrderForm, PaymentType, IProduct, ICard, 
@@ -16,6 +18,8 @@ import { Order } from './components/order';
 import { Contacts } from './components/contacts';
 import { Success } from './components/success';
 
+// все используемые шаблоны
+
 const cardCatalogTemplate = ensureElement<HTMLTemplateElement>('#card-catalog');
 const cardBasketTemplate = ensureElement<HTMLTemplateElement>('#card-basket');
 const cardPreviewTemplate = ensureElement<HTMLTemplateElement>('#card-preview');
@@ -24,6 +28,8 @@ const basketTemplate = ensureElement<HTMLTemplateElement>('#basket');
 const orderTemplate = ensureElement<HTMLTemplateElement>('#order');
 const contactsTemplate = ensureElement<HTMLTemplateElement>('#contacts');
 const successTemplate = ensureElement<HTMLTemplateElement>('#success');
+
+// используемые экземпляры главных классов
 
 const api = new ProjectApi(CDN_URL, API_URL);
 const events = new EventEmitter();
@@ -34,12 +40,13 @@ const basket = new Basket(cloneTemplate(basketTemplate), events);
 const order = new Order(cloneTemplate(orderTemplate), events);
 const contacts = new Contacts(cloneTemplate(contactsTemplate), events);
 
+// выгружаем с сервера карточки
+
 api.getCards()
   .then((data) => model.setItems(data))
   .catch((err) => console.log(err));
 
-// console.log(model.basket.orderList); //////
-// console.log(model.basket.totalPrice); /////
+// обновляем каталог
 
 events.on("catalog:fill", (catalog: ICard[]) => {
   page.catalog = catalog.map((item) => {
@@ -48,14 +55,11 @@ events.on("catalog:fill", (catalog: ICard[]) => {
   });
 });
 
+// открываем карточку
+
 events.on("card:open", (item: ICard) => {
   const card = new Card(cloneTemplate(cardPreviewTemplate), events);
   model.openCard(item);
-
-  // if (model.checkBasket(item))
-  //   card.inBasket = true;
-  // else
-  //   card.inBasket = false;
 
   if (model.checkBasket(item))
     card.button = 'Удалить из корзины';
@@ -68,6 +72,8 @@ events.on("card:open", (item: ICard) => {
   modal.openModal();
 });
 
+// блокируем/разблокируем прокрутку при открытии/закрытии модального окна
+
 events.on("modal:open", () => {
   page.isLocked = true;
 });
@@ -75,6 +81,8 @@ events.on("modal:open", () => {
 events.on("modal:close", () => {
   page.isLocked = false;
 });
+
+// открываем корзину
 
 events.on("basket:open", () => {
 
@@ -93,6 +101,8 @@ events.on("basket:open", () => {
   modal.openModal();
 })
 
+// изменяем содержимое корзины
+
 events.on("basket:change", (item?: ICard) => {
   if (item && !model.checkBasket(item))
     model.addInBasket(item);
@@ -107,7 +117,7 @@ events.on("basket:change", (item?: ICard) => {
     const item = model.items.find((item) => item.id === id);
     if (item) {
       const card = new Card(cloneTemplate(cardBasketTemplate), events);
-      const element =  card.elementUpdate(item);
+      const element = card.elementUpdate(item);
       const indexElement = element.querySelector('.basket__item-index');
       if (indexElement)
         indexElement.textContent = (model.basket.orderList.indexOf(id) + 1).toString();
@@ -116,9 +126,10 @@ events.on("basket:change", (item?: ICard) => {
   })
 })
 
+// открываем форму заполнения данных
+
 events.on("order:open", () => {
   model.formOrder();
-  // console.log(basket.totalPrice); //
   modal.elementUpdate({
     content: order.elementUpdate({
       payment: 'card',
@@ -129,6 +140,8 @@ events.on("order:open", () => {
   });
   modal.openModal();
 })
+
+// обрабатываем изменение введенных данных в формах
 
 events.on(/^order\..*change/, (data: {
   input: keyof OrderForm; value: string}) => {
@@ -142,15 +155,15 @@ events.on(/^contacts\..*change/,(data: {
   }
 );
 
+// проверяем все ли поля в форме заполнены верно
+
 events.on("errors:change", (errors: Partial<OrderForm>) => {
   const { payment, address, email, phone } = errors;
-  // console.log(payment); //
-  // console.log(address); //
   order.isValid = !payment && !address;
-  // console.log(email); //
-  // console.log(phone); //
   contacts.isValid = !email && !phone;
 })
+
+// переход к форме с контактными данными
 
 events.on("order:submit", () => {
   modal.elementUpdate({
@@ -163,6 +176,8 @@ events.on("order:submit", () => {
   });
   modal.openModal();
 })
+
+// запрос подтверждения заказа от сервера, очистка корзины
 
 events.on("contacts:submit", () => {
   console.log(model.order); //
@@ -180,11 +195,13 @@ events.on("contacts:submit", () => {
     .catch((error) => console.log(error));
 })
 
+// закрытие окна подтверждения
+
 events.on("success:close", () => {
   modal.closeModal();
 })
 
-// привести в требуемый вид документацию +-
+// привести в требуемый вид документацию +
 // реализовать базовые интерфейсы и типы данных из доки +
 // реализовать получение стартовых даных от сервера и их хранение +
 // реализовать отрисовку стартовой страницы +
@@ -211,3 +228,5 @@ events.on("success:close", () => {
 // отрисовка окна подтверждения +
 // очистка корзины +
 // закрытие окна кнопкой подтверждения +
+// убрать проверочные вызовы консоли и невостребованные куски кода +
+// обновить документацию

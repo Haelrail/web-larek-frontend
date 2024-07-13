@@ -10,10 +10,13 @@ export class Basket extends Component<IBasket> {
 
   constructor(element: HTMLElement, events: IEvents) {
     super(element, events);
-    // this.orderList = [];
+
     this._orderList = ensureElement<HTMLElement>('.basket__list', this.element);
     this._totalPrice = this.element.querySelector('.basket__price');
     this._confirmButton = this.element.querySelector('.button');
+
+    // открываем форму оплаты
+
     this._confirmButton.addEventListener('click', () => {
       events.emit('order:open');
     })
@@ -26,11 +29,8 @@ export class Basket extends Component<IBasket> {
   set orderList(elements: HTMLElement[]) {
     if (elements) {
       this._orderList.replaceChildren(...elements)
-      // this.changeDisabled(this._confirmButton, false)
     }
     else {
-      // this._orderList.replaceChildren(createElement<HTMLParagraphElement>('p'));
-      // this.changeDisabled(this._confirmButton, true);
     }
   }
 

@@ -22,18 +22,23 @@ export class Card extends Component<ICard> {
 
   constructor(element: HTMLElement, events: IEvents) {
     super(element, events);
+
     this._description = element.querySelector(`.card__text`);
     this._image = element.querySelector(`.card__image`);
-    // this._title = ensureElement<HTMLElement>('.card__title');
     this._title = element.querySelector(`.card__title`);
     this._category = element.querySelector(`.card__category`);
-    // this._price = ensureElement<HTMLElement>('.card__price');
     this._price = element.querySelector(`.card__price`);
     // this._inBasket = false;
+
+    // Открываем карточку нажатием в каталоге
+
     element.addEventListener('click', () => {
       if (this.item && this._image)
         events.emit('card:open', this.item);
     });
+
+    // добавляем/убираем карточку в/из корзины нажатием кнопки
+
     this._button = element.querySelector(`.card__button`);
     if (this._button) {
       this._button.addEventListener('click', () => {
@@ -52,8 +57,6 @@ export class Card extends Component<ICard> {
   // category: ProductType;
   // price: number | null;
   // inBasket: boolean;
-
-  //методы для полей image, category и description ???
 
   get id(): string {
     return this.element.dataset.id;
@@ -86,6 +89,8 @@ export class Card extends Component<ICard> {
   get category(): string {
     return this._category.textContent;
   }
+
+  // выбор цвета для категорий товаров в каталоге и превью
 
   set category(value: string) {
     this.addText(this._category, value);

@@ -15,6 +15,8 @@ export class Modal extends Component<IModal> {
     this._content = ensureElement<HTMLElement>(".modal__content", element);
     this._button = ensureElement<HTMLButtonElement>(".modal__close", element);
 
+// закрытие по клику вне модального окна
+
   document.addEventListener('click', (evt) => {
     const target = evt.target as Element;
     if (target.matches('.modal_active')) {
@@ -40,9 +42,4 @@ export class Modal extends Component<IModal> {
     // this.toggleClass(this.element, 'modal_active');
     this.events.emit('modal:close');
   }
-
-  // elementUpdate(data?: Partial<IModal>): HTMLElement {
-  //   Object.assign(this as object, data ?? {});
-  //   return this.element;
-  // }
 }

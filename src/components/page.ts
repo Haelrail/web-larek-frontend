@@ -4,9 +4,6 @@ import { ensureElement } from "../utils/utils";
 import { IPage } from "../types";
 
 export class Page extends Component<IPage> {
-  // counter: number;
-  // catalog: HTMLElement[];
-  // locked: boolean;
 
   protected _counter: HTMLElement;
   protected _catalog: HTMLElement;
