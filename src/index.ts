@@ -118,9 +118,7 @@ events.on("basket:change", (item?: ICard) => {
     if (item) {
       const card = new Card(cloneTemplate(cardBasketTemplate), events);
       const element = card.elementUpdate(item);
-      const indexElement = element.querySelector('.basket__item-index');
-      if (indexElement)
-        indexElement.textContent = (model.basket.orderList.indexOf(id) + 1).toString();
+      card.index = (model.basket.orderList.indexOf(id) + 1).toString();
       return element;
     }
   })
@@ -129,6 +127,7 @@ events.on("basket:change", (item?: ICard) => {
 // открываем форму заполнения данных
 
 events.on("order:open", () => {
+  model.clearFields();
   model.formOrder();
   modal.elementUpdate({
     content: order.elementUpdate({
@@ -168,8 +167,8 @@ events.on("errors:change", (errors: Partial<OrderForm>) => {
 events.on("order:submit", () => {
   modal.elementUpdate({
     content: contacts.elementUpdate({
-      payment: 'card',
-      address: '',
+      email: '',
+      phone: '',
       errorList: [],
       isValid: false,
     })
@@ -180,7 +179,6 @@ events.on("order:submit", () => {
 // запрос подтверждения заказа от сервера, очистка корзины
 
 events.on("contacts:submit", () => {
-  console.log(model.order); //
   api.orderConfirm(model.order)
     .then(() => {
       const success = new Success(cloneTemplate(successTemplate), events);
@@ -229,4 +227,7 @@ events.on("success:close", () => {
 // очистка корзины +
 // закрытие окна кнопкой подтверждения +
 // убрать проверочные вызовы консоли и невостребованные куски кода +
-// обновить документацию
+// обновить документацию +
+// исправить карточку без цены: отображение стоимости, блокирование кнопки на второй форме заказа +
+// в форме контактов введенные данные не сбрасываются +
+// замечания ревьюера +

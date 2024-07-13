@@ -3,8 +3,9 @@ import { IEvents } from "./events";
 export abstract class Component<T> {
   protected constructor(protected readonly element: HTMLElement, protected readonly events: IEvents) {};
 
-  toggleClass(element: HTMLElement, className: string) {
-    element.classList.toggle(className);
+  toggleClass(element: HTMLElement, className: string, force?: boolean) {
+    if (element)
+      element.classList.toggle(className, force);
   }
 
   changeDisabled(element: HTMLElement, value: boolean) {

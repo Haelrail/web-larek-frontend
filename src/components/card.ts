@@ -19,6 +19,7 @@ export class Card extends Component<ICard> {
     'кнопка': '_button',
     'хард-скил': '_hard'
   };
+  protected _index: HTMLElement;
 
   constructor(element: HTMLElement, events: IEvents) {
     super(element, events);
@@ -28,6 +29,7 @@ export class Card extends Component<ICard> {
     this._title = element.querySelector(`.card__title`);
     this._category = element.querySelector(`.card__category`);
     this._price = element.querySelector(`.card__price`);
+    this._index = element.querySelector(`.basket__item-index`);
     // this._inBasket = false;
 
     // Открываем карточку нажатием в каталоге
@@ -45,18 +47,9 @@ export class Card extends Component<ICard> {
         if (this.item) {
           events.emit('basket:change', this.item);
         }
-        // console.log('123');
       })
     }
   }
-
-  // id: string;
-  // description: string;
-  // image: string;
-  // title: string;
-  // category: ProductType;
-  // price: number | null;
-  // inBasket: boolean;
 
   get id(): string {
     return this.element.dataset.id;
@@ -94,10 +87,9 @@ export class Card extends Component<ICard> {
 
   set category(value: string) {
     this.addText(this._category, value);
-    this._category?.classList.remove('card__category_soft');
-    this._category?.classList.remove('card__category_other');
-    console.log(this.categoryPossible[value]);
-    this._category?.classList.add(`card__category${this.categoryPossible[value]}`);
+    this.toggleClass(this._category, 'card__category_soft', false);
+    this.toggleClass(this._category, 'card__category_other', false);
+    this.toggleClass(this._category, `card__category${this.categoryPossible[value]}`, true);
   }
 
   get price(): string {
@@ -107,21 +99,16 @@ export class Card extends Component<ICard> {
   set price(price: string) {
     if (price)
       this.addText(this._price, `${price} синапсов`);
-    else
-    this.addText(this._price, price);
+    else {
+      this.addText(this._price, 'Бесценно');
+      if (this._button)
+        this.changeDisabled(this._button, true);
+    }
   }
 
   get inBasket(): boolean {
     return this.inBasket;
   }
-
-  // set inBasket(value: boolean) {
-  //   this.inBasket = value;
-  //   if (value)
-  //     this._button.textContent = 'Удалить из корзины';
-  //   else
-  //     this._button.textContent = 'В корзину';
-  // }
 
   elementUpdate(data?: Partial<ICard>): HTMLElement {
     Object.assign(this as object, data ?? {});
@@ -132,5 +119,17 @@ export class Card extends Component<ICard> {
 
   set button(text: string) {
     this.addText(this._button, text);
+  }
+
+  get index() {
+    if(this._index)
+      return this._index.textContent;
+    else
+      return '';
+  }
+
+  set index(value: string) {
+    if (this._index)
+    this.addText(this._index, value);
   }
 }

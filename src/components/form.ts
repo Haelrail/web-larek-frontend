@@ -46,7 +46,7 @@ export class Form<T> extends Component<IForm> {
   }
 
   set isValid(value: boolean) {
-    this._submitButton.disabled = !value;
+    this.changeDisabled(this._submitButton, !value)
   }
 
   elementUpdate(data: Partial<T> & IForm): HTMLElement {

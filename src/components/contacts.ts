@@ -12,6 +12,6 @@ export class Contacts extends Form<OrderForm> {
   }
 
   set phone(value: string) {
-    ((this.element as HTMLFormElement).elements.namedItem('email') as HTMLInputElement).value = value;
+    ((this.element as HTMLFormElement).elements.namedItem('phone') as HTMLInputElement).value = value;
   }
 }

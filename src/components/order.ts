@@ -31,14 +31,12 @@ export class Order extends Form<OrderForm> {
 
   set payment(value: PaymentType) {
     if (value === 'card') {
-      // this.toggleClass(this._cardMethod, "button_alt-active");
-      // this.toggleClass(this._cashMethod, "button_alt-active");
-      this._cardMethod.classList.add("button_alt-active");
-      this._cashMethod.classList.remove("button_alt-active")
+      this.toggleClass(this._cardMethod, "button_alt-active", true);
+      this.toggleClass(this._cashMethod, "button_alt-active", false);
     }
     else {
-      this._cardMethod.classList.remove("button_alt-active");
-      this._cashMethod.classList.add("button_alt-active")
+      this.toggleClass(this._cardMethod, "button_alt-active", false);
+      this.toggleClass(this._cashMethod, "button_alt-active", true);
     }
 
   }

@@ -17,12 +17,10 @@ export class Modal extends Component<IModal> {
 
 // закрытие по клику вне модального окна
 
-  document.addEventListener('click', (evt) => {
-    const target = evt.target as Element;
-    if (target.matches('.modal_active')) {
-      this.closeModal();
-    }
-  })
+    this.element.addEventListener('click', (event) => {
+      if (event.target === this.element && !this._content.contains(event.target as Node))
+        this.closeModal();
+    })
 
     this._button.addEventListener('click', this.closeModal.bind(this));
   }
@@ -32,14 +30,12 @@ export class Modal extends Component<IModal> {
   }
 
   openModal() {
-    this.element.classList.add("modal_active");
-    // this.toggleClass(this.element, 'modal_active');
+    this.toggleClass(this.element, 'modal_active', true);
     this.events.emit('modal:open');
   }
 
   closeModal() {
-    this.element.classList.remove("modal_active");
-    // this.toggleClass(this.element, 'modal_active');
+    this.toggleClass(this.element, 'modal_active', false);
     this.events.emit('modal:close');
   }
 }

@@ -92,4 +92,13 @@ export class Model {
     this.order.items = this.basket.orderList;
     this.order.total = this.basket.totalPrice;
   }
+
+  // удаление данных пользователя
+
+  clearFields() {
+    this.order.payment = 'card';
+    this.order.address = '';
+    this.order.email = '';
+    this.order.phone = '';
+  }
 }
